@@ -1,0 +1,54 @@
+#pagespeed {
+    color: #474747;
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 14px;
+    line-height: 1.42857;
+}
+
+#pagespeed .logo {
+    margin: 20px 0;
+}
+
+#pagespeed .result_green {
+    color: #009A2D;
+}
+
+#pagespeed .result_orange {
+    color: #FDA100;
+}
+
+#pagespeed .result_red {
+    color: #DD4B39;
+}
+
+#pagespeed div.box {
+    background-color: #fcfcfc;
+    border: 1px solid #e7e7e7;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    padding: 10px;
+}
+
+#pagespeed .url {
+    font-style: italic;
+}
+
+#pagespeed .list_domain {
+    font-weight: bold;
+}
+
+#pagespeed .list_subdomain {
+}
+
+#pagespeed .tools-item {
+    margin-top: 25px;
+}
+
+#pagespeed a.tool-block {
+    margin-right: 10px;
+}
+
+#pagespeed .tool-icon img {
+    height: 32px;
+    width: 32px;
+}

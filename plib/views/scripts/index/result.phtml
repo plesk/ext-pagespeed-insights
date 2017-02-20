@@ -1,0 +1,127 @@
+<?php
+// Copyright 1999-2017. Parallels IP Holdings GmbH.
+?>
+<div id="pagespeed">
+    <div class="logo">
+        <?php if (pm_Session::getClient()->isAdmin()) : ?>
+            <a href="<?php echo pm_Context::getActionUrl('index'); ?>">
+        <?php endif; ?>
+            <img src="/modules/pagespeed-insights/images/button.png" alt="Google PageSpeed Insights"/>
+        <?php if (pm_Session::getClient()->isAdmin()) : ?>
+            </a>
+        <?php endif; ?>
+    </div>
+    <?php if (is_string($this->result)) : ?>
+        <?php echo $this->result; ?>
+    <?php elseif (is_object($this->result)) : ?>
+        <div class="result">
+            <h3>
+                <strong><?php echo $this->lmsg('result_id').' '.$this->result->name; ?></strong>
+            </h3>
+            <div class="box">
+                <?php if (!empty($this->result->screenshot)) : ?>
+                    <p>
+                        <img src="data:<?php echo $this->result->screenshot->mime_type; ?>;base64,<?php echo str_replace(array(
+                            '-',
+                            '_'
+                        ), array(
+                            '+',
+                            '/'
+                        ), $this->result->screenshot->data); ?>" width="<?php echo $this->result->screenshot->width; ?>" height="<?php echo $this->result->screenshot->height; ?>"/>
+                    </p>
+                <?php endif; ?>
+                <?php if (!empty($this->result->title)) : ?>
+                    <p><?php echo $this->lmsg('result_title_lable'); ?>
+                        <strong><?php echo $this->result->title; ?></strong>
+                    </p>
+                <?php endif; ?>
+                <p><?php echo $this->lmsg('result_overall_score_lable'); ?>
+                    <strong>
+                        <?php if ($this->result->score >= 85) : ?>
+                            <span class="result_green"><?php echo $this->result->score; ?></span>
+                        <?php elseif ($this->result->score < 85 AND $this->result->score >= 65) : ?>
+                            <span class="result_orange"><?php echo $this->result->score; ?></span>
+                        <?php else : ?>
+                            <span class="result_red"><?php echo $this->result->score; ?></span>
+                        <?php endif; ?>
+                        / 100
+                    </strong>
+                </p>
+            </div>
+            <h3>
+                <strong><?php echo $this->lmsg('result_page_stats'); ?></strong>
+            </h3>
+            <div class="box">
+                <?php foreach ($this->result->stats as $key => $value) : ?>
+                    <p><?php echo $this->lmsg('result_'.$key); ?>
+                        <strong><?php echo $value; ?></strong>
+                    </p>
+                <?php endforeach; ?>
+            </div>
+            <div class="box">
+                <p>
+                    <strong>
+                        <?php echo $this->lmsg('result_download_compressed_files', ['domain' => $this->result->compressed_files]); ?>
+                    </strong>
+                </p>
+            </div>
+            <h3>
+                <strong><?php echo $this->lmsg('result_rules'); ?></strong>
+            </h3>
+            <?php foreach ($this->result->rules as $key => $value) : ?>
+                <div class="box">
+                    <h4><strong><?php echo $value->name; ?></strong></h4>
+                    <p>
+                        <strong>
+                            <?php if ($value->impact < 10 AND $value->impact > 0) : ?>
+                                <span class="result_orange"><?php echo $this->lmsg('result_impact_consider_fixing'); ?></span>
+                            <?php elseif ($value->impact >= 10) : ?>
+                                <span class="result_red"><?php echo $this->lmsg('result_impact_should_fix'); ?></span>
+                            <?php else : ?>
+                                <span class="result_green"><?php echo $this->lmsg('result_impact_passed'); ?></span>
+                            <?php endif; ?>
+                        </strong>
+                    </p>
+                    <?php if (!empty($value->summary)) : ?>
+                        <p><strong>
+                                <?php echo $value->summary; ?>
+                            </strong>
+                        </p>
+                    <?php endif; ?>
+                    <?php if (!empty($value->url_blocks)) : ?>
+                        <?php foreach ($value->url_blocks as $value_url_blocks) : ?>
+                            <p><?php echo $value_url_blocks->header; ?></p>
+                            <?php if (!empty($value_url_blocks->urls)) : ?>
+                                <?php foreach ($value_url_blocks->urls as $value_url) : ?>
+                                    <p class="url">
+                                        <?php echo $value_url; ?>
+                                    </p>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                    <?php if ($key == 'AvoidLandingPageRedirects') : ?>
+                        <p class="tools-item">
+                            <a href="/admin/subscription/login/id/<?php echo $this->result->domain_id; ?>?pageUrl=%2Fsmb%2Fweb%2Fsettings%2Fid%2F<?php echo $this->result->site_id; ?>" class="tool-block">
+                                <span class="tool-icon">
+                                    <img src="/theme/icons/32/plesk/webscripting.png" alt=""/>
+                                </span>
+                                <span class="tool-name">
+                                    <?php echo $this->lmsg('result_internal_hosting_settings'); ?>
+                                </span>
+                            </a>
+                            <a href="/admin/subscription/login/id/<?php echo $this->result->domain_id; ?>?pageUrl=%2Fsmb%2Fweb%2Fweb-server-settings%2Fid%2F<?php echo $this->result->site_id; ?>" class="tool-block">
+                                <span class="tool-icon">
+                                    <img src="/theme/icons/32/plesk/web-servers.png" alt=""/>
+                                </span>
+                                <span class="tool-name">
+                                    <?php echo $this->lmsg('result_internal_apache_nginx'); ?>
+                                </span>
+                            </a>
+                        </p>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+</div>

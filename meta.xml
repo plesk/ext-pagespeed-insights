@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module>
+    <id>pagespeed-insights</id>
+    <name>Google PageSpeed Insights</name>
+    <description>With PageSpeed Insights you can identify ways to make your site faster and more mobile-friendly.</description>
+    <category>developer</category>
+    <version>1.0.1</version>
+    <release>1</release>
+    <vendor>Plesk</vendor>
+    <url>https://www.plesk.com</url>
+    <plesk_min_version>17.0</plesk_min_version>
+</module>

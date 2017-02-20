@@ -1,0 +1,23 @@
+<?php
+// Copyright 1999-2017. Parallels IP Holdings GmbH.
+?>
+<div id="pagespeed">
+    <div class="logo">
+        <img src="/modules/pagespeed-insights/images/button.png" alt="Google PageSpeed Insights"/>
+    </div>
+    <p>
+        <?php echo $this->output_description; ?>
+    </p>
+    <?php if(isset($this->error_access) AND !empty($this->error_access)) : ?>
+        <strong><?php echo $this->error_access; ?></strong>
+    <?php else: ?>
+    <h3>
+        <strong>
+            <?php echo $this->lmsg('output_select_domain'); ?>
+        </strong>
+    </h3>
+    <p>
+        <?php echo $this->renderList($this->list); ?>
+    </p>
+    <?php endif; ?>
+</div>
