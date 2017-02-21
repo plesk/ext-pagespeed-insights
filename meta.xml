@@ -5,7 +5,7 @@
     <description>With PageSpeed Insights you can identify ways to make your site faster and more mobile-friendly.</description>
     <category>developer</category>
     <version>1.0.1</version>
-    <release>1</release>
+    <release>2</release>
     <vendor>Plesk</vendor>
     <url>https://www.plesk.com</url>
     <plesk_min_version>17.0</plesk_min_version>
