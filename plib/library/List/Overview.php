@@ -9,8 +9,7 @@ class Modules_PagespeedInsights_List_Overview extends pm_View_List_Simple
 
         $data = $this->getData();
         $this->setData($data);
-        $this->setColumns(
-            array(
+        $this->setColumns(array(
                 'column-1' => array(
                     'title'      => $this->lmsg('table_domain'),
                     'noEscape'   => true,
@@ -27,8 +26,7 @@ class Modules_PagespeedInsights_List_Overview extends pm_View_List_Simple
                     'noEscape' => true,
                     'sortable' => false,
                 )
-            )
-        );
+            ));
 
         $this->setDataUrl(['action' => 'index-data']);
     }
@@ -55,6 +53,15 @@ class Modules_PagespeedInsights_List_Overview extends pm_View_List_Simple
                     $class = 'list_domain';
                 }
 
+                $domain_name = '<span class="domainid'.$dom_id.str_pad($site_id, 3, '0', STR_PAD_LEFT).' '.$class.'">'.$domain->getDisplayName().'</span>';
+
+                $resolving = pm_Settings::get('pagespeed_resolving_'.$site_id, true);
+
+                if (empty($resolving) OR empty($domain_available)) {
+
+                    $domain_name .= ' <span class="small" title="'.$this->lmsg('hint_ip_does_not_resolve').'">(?)</span>';
+                }
+
                 $domain_score = $this->getDomainScore($site_id);
                 $action_link_string = $this->lmsg('table_details');
 
@@ -63,10 +70,9 @@ class Modules_PagespeedInsights_List_Overview extends pm_View_List_Simple
                     $action_link_string = $this->lmsg('table_analyze');
                 }
 
-                $resolving = pm_Settings::get('pagespeed_resolving_'.$site_id, true);
                 $domain_available = Modules_PagespeedInsights_Helper::domainAvailable($domain, 'index');
 
-                if (empty($resolving) OR empty($domain_available)) {
+                if (empty($domain_available)) {
 
                     $domain_score = $this->lmsg('error_domain_not_available_list');
                     $action_link_string = $this->lmsg('table_recheck');
@@ -75,7 +81,7 @@ class Modules_PagespeedInsights_List_Overview extends pm_View_List_Simple
                 $action_link = '<a href="'.pm_Context::getActionUrl('index', 'result').'?site_id='.$site_id.'">'.$action_link_string.'</a>';
 
                 $data[] = array(
-                    'column-1' => '<span class="domainid'.$dom_id.str_pad($site_id, 3, '0', STR_PAD_LEFT).' '.$class.'">'.$domain->getDisplayName().'</span>',
+                    'column-1' => $domain_name,
                     'column-2' => $domain_score,
                     'column-3' => $action_link,
                 );
