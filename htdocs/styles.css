@@ -52,3 +52,7 @@
     height: 32px;
     width: 32px;
 }
+
+#pagespeed .small {
+    font-size: 80%;
+}

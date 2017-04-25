@@ -317,35 +317,34 @@ class Modules_PagespeedInsights_Helper
         }
 
         if ($action == 'result') {
-            if (self::isResolvingToPlesk($domain_object) != true) {
-                pm_Settings::set('pagespeed_resolving_'.$domain_object->getId(), false);
-
-                return false;
-            }
-
-            pm_Settings::set('pagespeed_resolving_'.$domain_object->getId(), true);
+            self::isResolvingToPlesk($domain_object);
         }
 
         return true;
     }
 
     /**
+     * Checks whether domain name is resolving to Plesk server directly - if not then the domain name is pointing to another
+     * IP address what happens if the user is using a proxy server or the domain is not mapping the Plesk server at all
+     *
      * @param pm_Domain $domain_object
      *
      * @return bool
      */
     private static function isResolvingToPlesk($domain_object)
     {
+        $ip_resolving = false;
+
         try {
             $records = @dns_get_record($domain_object->getName(), DNS_A | DNS_AAAA);
         }
         catch (Exception $e) {
 
-            return false;
+            return $ip_resolving;
         }
 
         if (empty($records)) {
-            return false;
+            return $ip_resolving;
         }
 
         $domain_ip_addresses = $domain_object->getIpAddresses();
@@ -361,11 +360,13 @@ class Modules_PagespeedInsights_Helper
 
             foreach ($domain_ip_addresses as $domain_ip) {
                 if ($ip_address === $domain_ip) {
-                    return true;
+                    $ip_resolving = true;
                 }
             }
         }
 
-        return false;
+        pm_Settings::set('pagespeed_resolving_'.$domain_object->getId(), $ip_resolving);
+
+        return $ip_resolving;
     }
 }
