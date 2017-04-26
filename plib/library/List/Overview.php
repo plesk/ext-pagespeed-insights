@@ -1,6 +1,11 @@
 <?php
-// Copyright 1999-2017. Parallels IP Holdings GmbH.
+/**
+ * Copyright 1999-2017. Parallels IP Holdings GmbH.
+ */
 
+/**
+ * Class Modules_PagespeedInsights_List_Overview
+ */
 class Modules_PagespeedInsights_List_Overview extends pm_View_List_Simple
 {
     public function __construct(Zend_View $view, Zend_Controller_Request_Abstract $request)
@@ -10,23 +15,23 @@ class Modules_PagespeedInsights_List_Overview extends pm_View_List_Simple
         $data = $this->getData();
         $this->setData($data);
         $this->setColumns(array(
-                'column-1' => array(
-                    'title'      => $this->lmsg('table_domain'),
-                    'noEscape'   => true,
-                    'searchable' => true,
-                    'sortable'   => true,
-                ),
-                'column-2' => array(
-                    'title'    => $this->lmsg('table_domain_score'),
-                    'noEscape' => true,
-                    'sortable' => true,
-                ),
-                'column-3' => array(
-                    'title'    => '',
-                    'noEscape' => true,
-                    'sortable' => false,
-                )
-            ));
+            'column-1' => array(
+                'title'      => $this->lmsg('table_domain'),
+                'noEscape'   => true,
+                'searchable' => true,
+                'sortable'   => true,
+            ),
+            'column-2' => array(
+                'title'    => $this->lmsg('table_domain_score'),
+                'noEscape' => true,
+                'sortable' => true,
+            ),
+            'column-3' => array(
+                'title'    => '',
+                'noEscape' => true,
+                'sortable' => false,
+            )
+        ));
 
         $this->setDataUrl(['action' => 'index-data']);
     }

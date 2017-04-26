@@ -1,6 +1,11 @@
 <?php
-// Copyright 1999-2017. Parallels IP Holdings GmbH.
+/**
+ * Copyright 1999-2017. Parallels IP Holdings GmbH.
+ */
 
+/**
+ * Class Modules_PagespeedInsights_Helper
+ */
 class Modules_PagespeedInsights_Helper
 {
     /**
@@ -368,5 +373,157 @@ class Modules_PagespeedInsights_Helper
         pm_Settings::set('pagespeed_resolving_'.$domain_object->getId(), $ip_resolving);
 
         return $ip_resolving;
+    }
+
+    /**
+     * Runs shell script in the postInstallCheck trigger
+     */
+    public static function postInstallCheck()
+    {
+        pm_ApiCli::callSbin('postinstallcheck.sh');
+    }
+
+    /**
+     * Runs shell script in the preUninstallCheck trigger
+     */
+    public static function preUninstallCheck()
+    {
+        pm_ApiCli::callSbin('preuninstallcheck.sh');
+    }
+
+    /**
+     * Helper function to backup the configuration file
+     */
+    public static function backupConfigFile()
+    {
+        $file_manager = new pm_ServerFileManager();
+
+        // First create a backup of the initial config file - only once in the first saving process
+        if (!$file_manager->fileExists('/usr/local/psa/var/modules/pagespeed-insights/pagespeed.conf')) {
+            $config_data_ori = self::loadConfigFile();
+
+            if (!empty($config_data_ori)) {
+                $file_manager->filePutContents('/usr/local/psa/var/modules/pagespeed-insights/pagespeed.conf', $config_data_ori);
+            }
+        }
+    }
+
+    /**
+     * Helper function to load the configuration file data
+     *
+     * @return bool|string
+     */
+    public static function loadConfigFile()
+    {
+        $file_manager = new pm_ServerFileManager();
+        $config_path = self::getConfigPath();
+
+        if (!empty($config_path)) {
+            $config = $file_manager->fileGetContents($config_path);
+
+            if (!empty($config)) {
+                return $config;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Gets the configuration path depending on the operation system
+     *
+     * @return bool|string
+     */
+    private static function getConfigPath()
+    {
+        $file_manager = new pm_ServerFileManager();
+
+        if ($file_manager->fileExists('/etc/httpd/conf.d/pagespeed.conf')) {
+            // CentOS
+            return '/etc/httpd/conf.d/pagespeed.conf';
+        } elseif ($file_manager->fileExists('/etc/apache2/mods-available/pagespeed.conf')) {
+            // Ubuntu
+            return '/etc/apache2/mods-available/pagespeed.conf';
+        }
+
+        return false;
+    }
+
+    /**
+     * Helper function to save the transmitted data to the configuration file
+     *
+     * @param $config_data
+     *
+     * @return bool
+     */
+    public static function saveConfigFile($config_data)
+    {
+        if (!empty($config_data)) {
+            $file_manager = new pm_ServerFileManager();
+            $config_path = self::getConfigPath();
+
+            if (!empty($config_path)) {
+                $file_manager->filePutContents($config_path, $config_data);
+
+                // Restart web server to activate changes
+                $result = pm_ApiCli::callSbin('restart_server.sh', array(), pm_ApiCli::RESULT_FULL);
+
+                if ($result['code']) {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Helper function to restore the previously stored configuration file
+     *
+     * @return bool
+     */
+    public static function restoreConfigFile()
+    {
+        $file_manager = new pm_ServerFileManager();
+
+        // First create a backup of the initial config file - only once in the first saving process
+        if ($file_manager->fileExists('/usr/local/psa/var/modules/pagespeed-insights/pagespeed.conf')) {
+            $config_data_backup = $file_manager->fileGetContents('/usr/local/psa/var/modules/pagespeed-insights/pagespeed.conf');
+            $config_path = self::getConfigPath();
+
+            if (!empty($config_data_backup) and !empty($config_path)) {
+                $file_manager->filePutContents(self::getConfigPath(), $config_data_backup);
+
+                // Restart web server to activate changes
+                $result = pm_ApiCli::callSbin('restart_server.sh', array(), pm_ApiCli::RESULT_FULL);
+
+                if ($result['code']) {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks the status of the Pagespeed Apache module installation
+     *
+     * @return bool
+     */
+    public static function checkPagespeedStatus()
+    {
+        // Restart web server to activate changes
+        $result = pm_ApiCli::callSbin('pagespeed_installed.sh', array(), pm_ApiCli::RESULT_FULL);
+
+        if (!empty($result['code']) OR empty(trim($result['stdout']))) {
+            return false;
+        }
+
+        return true;
     }
 }
