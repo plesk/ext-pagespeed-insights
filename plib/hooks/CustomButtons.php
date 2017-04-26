@@ -1,6 +1,11 @@
 <?php
-// Copyright 1999-2017. Parallels IP Holdings GmbH.
+/**
+ * Copyright 1999-2017. Parallels IP Holdings GmbH.
+ */
 
+/**
+ * Class Modules_PagespeedInsights_CustomButtons
+ */
 class Modules_PagespeedInsights_CustomButtons extends pm_Hook_CustomButtons
 {
     /**

@@ -1,6 +1,11 @@
 <?php
-// Copyright 1999-2017. Parallels IP Holdings GmbH.
+/**
+ * Copyright 1999-2017. Parallels IP Holdings GmbH.
+ */
 
+/**
+ * Class IndexController
+ */
 class IndexController extends pm_Controller_Action
 {
     public function init()
@@ -15,12 +20,29 @@ class IndexController extends pm_Controller_Action
 
     public function indexAction()
     {
-        if(!pm_Session::getClient()->isAdmin()) {
+        if (!pm_Session::getClient()->isAdmin()) {
             $this->view->error_access = $this->lmsg('error_only_admin');
         }
 
         $this->view->output_description = $this->lmsg('output_description');
+        $this->addConfigLink();
+
         $this->view->list = new Modules_PagespeedInsights_List_Overview($this->view, $this->_request);
+    }
+
+    private function addConfigLink()
+    {
+        $this->view->output_configlink = '';
+
+        if (pm_ProductInfo::isUnix()) {
+            $this->view->output_configlink = $this->lmsg('output_configlink_installed');
+
+            $pagespeed_status = Modules_PagespeedInsights_Helper::checkPagespeedStatus();
+
+            if (empty($pagespeed_status)) {
+                $this->view->output_configlink = $this->lmsg('output_configlink_installed_not');
+            }
+        }
     }
 
     public function indexDataAction()
@@ -39,7 +61,7 @@ class IndexController extends pm_Controller_Action
             return;
         }
 
-        if(!pm_Session::getClient()->hasAccessToDomain($get_global['site_id'])) {
+        if (!pm_Session::getClient()->hasAccessToDomain($get_global['site_id'])) {
             $this->view->result = $this->lmsg('error_wrong_domain_selected');
 
             return;

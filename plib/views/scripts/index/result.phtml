@@ -16,7 +16,12 @@
     <?php elseif (is_object($this->result)) : ?>
         <div class="result">
             <h3>
-                <strong><?php echo $this->lmsg('result_id').' '.$this->result->name; ?></strong>
+                <strong>
+                    <?php echo $this->lmsg('result_id'); ?>
+                    <a href="<?php echo $this->result->id; ?>" target="_blank">
+                        <?php echo $this->result->name; ?>
+                    </a>
+                </strong>
             </h3>
             <div class="box">
                 <?php if (!empty($this->result->screenshot)) : ?>
