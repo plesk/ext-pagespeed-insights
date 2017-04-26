@@ -4,7 +4,7 @@
     <name>Google PageSpeed Insights</name>
     <description>With PageSpeed Insights you can identify ways to make your site faster and more mobile-friendly.</description>
     <category>developer</category>
-    <version>1.1.0-dev</version>
+    <version>1.1.0</version>
     <release>1</release>
     <vendor>Plesk</vendor>
     <url>https://www.plesk.com</url>
