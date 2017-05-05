@@ -8,6 +8,8 @@
  */
 class IndexController extends pm_Controller_Action
 {
+    protected $installation;
+
     public function init()
     {
         parent::init();
@@ -25,24 +27,9 @@ class IndexController extends pm_Controller_Action
         }
 
         $this->view->output_description = $this->lmsg('output_description');
-        $this->addConfigLink();
-
         $this->view->list = new Modules_PagespeedInsights_List_Overview($this->view, $this->_request);
-    }
-
-    private function addConfigLink()
-    {
-        $this->view->output_configlink = '';
-
-        if (pm_ProductInfo::isUnix()) {
-            $this->view->output_configlink = $this->lmsg('output_configlink_installed');
-
-            $pagespeed_status = Modules_PagespeedInsights_Helper::checkPagespeedStatus();
-
-            if (empty($pagespeed_status)) {
-                $this->view->output_configlink = $this->lmsg('output_configlink_installed_not');
-            }
-        }
+        $this->view->installstatus = Modules_PagespeedInsights_Helper::checkPagespeedStatus();
+        $this->view->config_default = Modules_PagespeedInsights_Helper::compareConfigFiles();
     }
 
     public function indexDataAction()

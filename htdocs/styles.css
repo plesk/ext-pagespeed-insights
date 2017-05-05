@@ -44,6 +44,12 @@
     margin-top: 25px;
 }
 
+@media (min-width:768px) {
+    #pagespeed .tools-list .tools-item {
+        width:32%
+    }
+}
+
 #pagespeed a.tool-block {
     margin-right: 10px;
 }

@@ -72,6 +72,27 @@ class Modules_PagespeedInsights_Helper
     }
 
     /**
+     * Adds a span element with a CSS class to the form field and removes not provided language strings
+     *
+     * @param string $language_string
+     * @param string $class_name
+     *
+     * @return string
+     */
+    public static function addSpanTranslation($language_string, $class_name, $language_string_params = array())
+    {
+        $translated_string = pm_Locale::lmsg($language_string, $language_string_params);
+
+        if ($translated_string == '[['.$language_string.']]') {
+            $translated_string = '';
+        }
+
+        $span_element = '<span class="'.$class_name.'">'.$translated_string.'</span>';
+
+        return $span_element;
+    }
+
+    /**
      * Creates the output object from the PageSpeed Insights response data
      *
      * @param object    $pagespeed_data
@@ -488,7 +509,7 @@ class Modules_PagespeedInsights_Helper
     {
         $file_manager = new pm_ServerFileManager();
 
-        // First create a backup of the initial config file - only once in the first saving process
+        // Check for the backup file and restore from it if exists
         if ($file_manager->fileExists('/usr/local/psa/var/modules/pagespeed-insights/pagespeed.conf')) {
             $config_data_backup = $file_manager->fileGetContents('/usr/local/psa/var/modules/pagespeed-insights/pagespeed.conf');
             $config_path = self::getConfigPath();
@@ -503,6 +524,28 @@ class Modules_PagespeedInsights_Helper
                     return false;
                 }
 
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Compares default file with current configuration file
+     *
+     * @return bool
+     */
+    public static function compareConfigFiles()
+    {
+        $file_manager = new pm_ServerFileManager();
+
+        // Compare content of the backup file with the content of the current configuration file
+        if ($file_manager->fileExists('/usr/local/psa/var/modules/pagespeed-insights/pagespeed.conf')) {
+            $config_data_backup = $file_manager->fileGetContents('/usr/local/psa/var/modules/pagespeed-insights/pagespeed.conf');
+            $config_data_current = $file_manager->fileGetContents(self::getConfigPath());
+
+            if ($config_data_backup == $config_data_current) {
                 return true;
             }
         }

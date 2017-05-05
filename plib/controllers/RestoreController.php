@@ -4,9 +4,9 @@
  */
 
 /**
- * Class ConfigController
+ * Class RestoreController
  */
-class ConfigController extends pm_Controller_Action
+class RestoreController extends pm_Controller_Action
 {
     protected $_accessLevel = 'admin';
 
@@ -17,7 +17,7 @@ class ConfigController extends pm_Controller_Action
         $this->view->headLink()->appendStylesheet(pm_Context::getBaseUrl().'styles.css');
 
         // Set page title for all actions
-        $this->view->pageTitle = $this->lmsg('page_title_config');
+        $this->view->pageTitle = $this->lmsg('page_title_apache');
     }
 
     /**
@@ -25,7 +25,6 @@ class ConfigController extends pm_Controller_Action
      */
     public function indexAction()
     {
-        // Support only for Unix at the moment
         if (!pm_ProductInfo::isUnix()) {
             $this->_redirect(pm_Context::getBaseUrl());
         }
@@ -46,7 +45,7 @@ class ConfigController extends pm_Controller_Action
     public function formAction()
     {
         // Set the description text
-        $this->view->output_description = Modules_PagespeedInsights_Helper::addSpanTranslation('output_description_config', 'description-extension');
+        $this->view->output_description = Modules_PagespeedInsights_Helper::addSpanTranslation('output_description_restore', 'description-extension');
 
         $form = new pm_Form_Simple();
         $this->addConfigTextarea($form);
@@ -75,25 +74,17 @@ class ConfigController extends pm_Controller_Action
         $config = Modules_PagespeedInsights_Helper::loadConfigFile();
 
         if (!empty($config) AND !empty($this->view->pagespeed_status)) {
-            $form->addElement('textarea', 'config', [
-                'label'      => $this->lmsg('form_type_config'),
-                'value'      => $config,
-                'class'      => 'f-max-size',
-                'rows'       => 10,
-                'required'   => true,
-                'validators' => [
-                    [
-                        'NotEmpty',
-                        true
-                    ],
-                ],
+            $form->addElement('checkbox', 'restore', [
+                'label'   => $this->lmsg('form_type_config_restore'),
+                'value'   => '',
+                'checked' => false
             ]);
         }
     }
 
     private function addButtons(&$form)
     {
-        $button_submit = $this->lmsg('form_button_save');
+        $button_submit = $this->lmsg('form_button_restore');
 
         $form->addControlButtons([
             'sendTitle'  => $button_submit,
@@ -108,29 +99,31 @@ class ConfigController extends pm_Controller_Action
      */
     private function processPostRequest($form)
     {
-        if ($form->getValue('config')) {
-            if ($this->runSaveConfig($form->getValue('config'))) {
-                $this->_status->addMessage('info', $this->lmsg('message_success_config'));
+        if ($form->getValue('restore')) {
+            if ($this->runRestoreConfig()) {
+                $this->_status->addMessage('info', $this->lmsg('message_success_config_restord'));
             } else {
-                $this->_status->addMessage('error', $this->lmsg('message_error_config'));
+                $this->_status->addMessage('error', $this->lmsg('message_error_config_restord'));
             }
         }
 
-        $this->_helper->json(['redirect' => pm_Context::getActionUrl('config', 'index')]);
+        if (empty(pm_View_Status::getAllMessages(false))) {
+            $this->_status->addMessage('warning', $this->lmsg('message_warning_restore'));
+        }
+
+        $this->_helper->json(['redirect' => pm_Context::getActionUrl('restore', 'index')]);
     }
 
     /**
-     * Saves the entered data to the PageSpeed configuration file
-     *
-     * @param $config
+     * Restores the configuration file with the default file that was stored after the installation
      *
      * @return bool
      */
-    private function runSaveConfig($config)
+    private function runRestoreConfig()
     {
-        $config_saved = (bool) Modules_PagespeedInsights_Helper::saveConfigFile($config);
+        $config_restored = (bool) Modules_PagespeedInsights_Helper::restoreConfigFile();
 
-        if (!empty($config_saved)) {
+        if (!empty($config_restored)) {
             return true;
         }
 
