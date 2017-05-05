@@ -208,7 +208,7 @@ class ConfigController extends pm_Controller_Action
         }
 
         if (empty(pm_View_Status::getAllMessages(false))) {
-            //$this->_status->addMessage('warning', $this->lmsg('message_warning_installation'));
+            $this->_status->addMessage('warning', $this->lmsg('message_warning_installation'));
         }
 
         $this->_helper->json(['redirect' => pm_Context::getActionUrl('config', 'index')]);
