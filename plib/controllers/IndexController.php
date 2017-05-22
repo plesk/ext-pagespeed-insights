@@ -23,7 +23,7 @@ class IndexController extends pm_Controller_Action
     public function indexAction()
     {
         if (!pm_Session::getClient()->isAdmin()) {
-            $this->view->error_access = $this->lmsg('error_only_admin');
+            throw new Exception($this->lmsg('error_only_admin'));
         }
 
         $this->view->output_description = $this->lmsg('output_description');
