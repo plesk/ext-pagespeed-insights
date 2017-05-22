@@ -111,7 +111,7 @@ class RestoreController extends pm_Controller_Action
             $this->_status->addMessage('warning', $this->lmsg('message_warning_restore'));
         }
 
-        $this->_helper->json(['redirect' => pm_Context::getActionUrl('restore', 'index')]);
+        $this->_helper->json(['redirect' => pm_Context::getActionUrl('index', 'index')]);
     }
 
     /**

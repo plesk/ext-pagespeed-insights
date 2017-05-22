@@ -135,7 +135,7 @@ class InstallController extends pm_Controller_Action
             $this->_status->addMessage('warning', $this->lmsg('message_warning_installation'));
         }
 
-        $this->_helper->json(['redirect' => pm_Context::getActionUrl('install', 'index')]);
+        $this->_helper->json(['redirect' => pm_Context::getActionUrl('index', 'index')]);
     }
 
     /**
