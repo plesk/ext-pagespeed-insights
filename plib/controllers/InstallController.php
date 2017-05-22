@@ -128,6 +128,9 @@ class InstallController extends pm_Controller_Action
             if ($this->runInstallation('apache')) {
                 Modules_PagespeedInsights_Helper::backupConfigFile();
                 $this->_status->addMessage('info', $this->lmsg('message_success_apache'));
+                $this->_helper->json(['redirect' => pm_Context::getActionUrl('index', 'index')]);
+
+                return;
             }
         }
 
@@ -135,7 +138,7 @@ class InstallController extends pm_Controller_Action
             $this->_status->addMessage('warning', $this->lmsg('message_warning_installation'));
         }
 
-        $this->_helper->json(['redirect' => pm_Context::getActionUrl('index', 'index')]);
+        $this->_helper->json(['redirect' => pm_Context::getActionUrl('install', 'index')]);
     }
 
     /**
