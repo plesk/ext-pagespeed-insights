@@ -27,9 +27,61 @@ class IndexController extends pm_Controller_Action
         }
 
         $this->view->output_description = $this->lmsg('output_description');
-        $this->view->list = new Modules_PagespeedInsights_List_Overview($this->view, $this->_request);
         $this->view->installstatus = Modules_PagespeedInsights_Helper::checkPagespeedStatus();
         $this->view->config_default = Modules_PagespeedInsights_Helper::compareConfigFiles();
+        $this->view->tools = $this->addToolsButtons($this->view->installstatus, $this->view->config_default);
+        $this->view->list = new Modules_PagespeedInsights_List_Overview($this->view, $this->_request);
+    }
+
+    /**
+     * Adds buttons for the Apache Module integration (install, config and restore)
+     *
+     * @param bool $installation_status
+     * @param bool $config_default
+     *
+     * @return array
+     */
+    private function addToolsButtons($installation_status = false, $config_default = true)
+    {
+        $buttons = array();
+
+        $buttons[] = array(
+            'icon'        => pm_Context::getBaseUrl().'/images/tool-apache-install.png',
+            'title'       => $installation_status ? $this->lmsg('tool_apache_reinstall') : $this->lmsg('tool_apache_install'),
+            'description' => $this->lmsg('tool_apache_info'),
+            'controller'  => 'install',
+            'action'      => 'index'
+        );
+
+        if (!empty($installation_status)) {
+            $config_file = $this->lmsg('tool_config_file_default');
+
+            if (empty($config_default)) {
+                $config_file = $this->lmsg('tool_config_file_custom');
+            }
+
+            $config_description = $this->lmsg('tool_config_edit_description').' '.$config_file;
+
+            $buttons[] = array(
+                'icon'        => pm_Context::getBaseUrl().'/images/tool-config-edit.png',
+                'title'       => $this->lmsg('tool_config_edit'),
+                'description' => $config_description,
+                'controller'  => 'config',
+                'action'      => 'index'
+            );
+
+            if (empty($config_default)) {
+                $buttons[] = array(
+                    'icon'        => pm_Context::getBaseUrl().'/images/tool-config-restore.png',
+                    'title'       => $this->lmsg('tool_config_restore'),
+                    'description' => $this->lmsg('tool_config_restore_description'),
+                    'controller'  => 'restore',
+                    'action'      => 'index'
+                );
+            }
+        }
+
+        return $buttons;
     }
 
     public function indexDataAction()

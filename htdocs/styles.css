@@ -50,6 +50,10 @@
     }
 }
 
+#pagespeed .tool-name {
+    font-weight: bold;
+}
+
 #pagespeed a.tool-block {
     margin-right: 10px;
 }

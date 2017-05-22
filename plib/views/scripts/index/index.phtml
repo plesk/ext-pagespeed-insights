@@ -9,54 +9,7 @@
         <?php echo $this->output_description; ?>
     </p>
     <?php if (pm_ProductInfo::isUnix()) : ?>
-        <div class="content-area">
-            <div class="content-wrapper">
-                <ul class="tools-list">
-                    <li class="tools-item">
-                        <div class="tool-block">
-                            <span class="tool-icon"><img src="/modules/pagespeed-insights/images/tool-apache-install.png"/></span>
-                            <?php if (empty($this->installstatus)) : ?>
-                                <span class="tool-name"><a href="/modules/pagespeed-insights/index.php/install"><?php echo pm_Locale::lmsg('tool_apache_install'); ?></a></span>
-                            <?php else: ?>
-                                <span class="tool-name"><a href="/modules/pagespeed-insights/index.php/install"><?php echo pm_Locale::lmsg('tool_apache_reinstall'); ?></a></span>
-                            <?php endif; ?>
-                            <span class="tool-info"><?php echo pm_Locale::lmsg('tool_apache_info'); ?></span>
-                        </div>
-                    </li>
-                    <li class="tools-item">
-                        <div class="tool-block">
-                            <span class="tool-icon"><img src="/modules/pagespeed-insights/images/tool-config-edit.png"/></span>
-                            <?php if (empty($this->installstatus)) : ?>
-                                <span class="tool-name"><?php echo pm_Locale::lmsg('tool_config_edit'); ?></span>
-                                <span class="tool-info"><?php echo pm_Locale::lmsg('tool_config_edit_description_not_installed'); ?></span>
-                            <?php else: ?>
-                                <span class="tool-name"><a href="/modules/pagespeed-insights/index.php/config"><?php echo pm_Locale::lmsg('tool_config_edit'); ?></a></span>
-                                <span class="tool-info">
-                                    <?php echo pm_Locale::lmsg('tool_config_edit_description'); ?>
-                                    <?php if (empty($this->config_default)) : ?>
-                                        <?php echo pm_Locale::lmsg('tool_config_file_custom'); ?>
-                                    <?php else : ?>
-                                        <?php echo pm_Locale::lmsg('tool_config_file_default'); ?>
-                                    <?php endif; ?>
-                                </span>
-                            <?php endif; ?>
-                        </div>
-                    </li>
-                    <li class="tools-item">
-                        <div class="tool-block">
-                            <span class="tool-icon"><img src="/modules/pagespeed-insights/images/tool-config-restore.png"/></span>
-                            <?php if (empty($this->installstatus)) : ?>
-                                <span class="tool-name"><?php echo pm_Locale::lmsg('tool_config_restore'); ?></span>
-                                <span class="tool-info"><?php echo pm_Locale::lmsg('tool_config_restore_description_not_installed'); ?></span>
-                            <?php else: ?>
-                                <span class="tool-name"><a href="/modules/pagespeed-insights/index.php/restore"><?php echo pm_Locale::lmsg('tool_config_restore'); ?></a></span>
-                                <span class="tool-info"><?php echo pm_Locale::lmsg('tool_config_restore_description'); ?></span>
-                            <?php endif; ?>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <?php echo $this->renderTools($this->tools); ?>
     <?php endif; ?>
     <?php if (isset($this->error_access) AND !empty($this->error_access)) : ?>
         <strong><?php echo $this->error_access; ?></strong>
