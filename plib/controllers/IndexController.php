@@ -45,6 +45,10 @@ class IndexController extends pm_Controller_Action
     {
         $buttons = array();
 
+        if (!pm_ProductInfo::isUnix()) {
+            return $buttons;
+        }
+
         $buttons[] = array(
             'icon'        => pm_Context::getBaseUrl().'/images/tool-apache-install.png',
             'title'       => $installation_status ? $this->lmsg('tool_apache_reinstall') : $this->lmsg('tool_apache_install'),

@@ -560,6 +560,10 @@ class Modules_PagespeedInsights_Helper
      */
     public static function checkPagespeedStatus()
     {
+        if (!pm_ProductInfo::isUnix()) {
+            return false;
+        }
+
         // Restart web server to activate changes
         $result = pm_ApiCli::callSbin('pagespeed_installed.sh', array(), pm_ApiCli::RESULT_FULL);
 

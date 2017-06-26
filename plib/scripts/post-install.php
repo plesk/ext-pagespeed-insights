@@ -3,7 +3,9 @@
  * Copyright 1999-2017. Parallels IP Holdings GmbH.
  */
 
-pm_Loader::registerAutoload();
-pm_Context::init('pagespeed-insights');
+if (pm_ProductInfo::isUnix()) {
+    pm_Loader::registerAutoload();
+    pm_Context::init('pagespeed-insights');
 
-Modules_PagespeedInsights_Helper::postInstallCheck();
+    Modules_PagespeedInsights_Helper::postInstallCheck();
+}
