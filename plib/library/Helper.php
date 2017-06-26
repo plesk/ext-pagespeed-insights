@@ -38,17 +38,23 @@ class Modules_PagespeedInsights_Helper
                 return $e->getMessage();
             }
 
+            $pagespeed_result_body = json_decode($pagespeed_result->getBody());
+
             if ($pagespeed_result->isError()) {
-                return $pagespeed_result->getMessage()."\n\n".$pagespeed_result->getRawBody();
+                $error_output = $pagespeed_result->getMessage();
+
+                if (!empty($pagespeed_result_body->error->message)) {
+                    $error_output .= ' - '.$pagespeed_result_body->error->message;
+                }
+
+                return $error_output;
             }
 
-            $pagespeed_result = json_decode($pagespeed_result->getBody());
-
-            if ($pagespeed_result->responseCode != 200) {
+            if ($pagespeed_result_body->responseCode != 200) {
                 return 'error_http_not_200';
             }
 
-            return $pagespeed_result;
+            return $pagespeed_result_body;
         }
     }
 
