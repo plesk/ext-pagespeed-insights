@@ -1,3 +1,7 @@
+# 1.1.1 (26 October 2017)
+
+* [+] Added extension to the social category
+
 # 1.1.0 (26 April 2017)
 
 * [+] Added PageSpeed Apache Module by Google - Complete integration with installation and configuration
