@@ -1,7 +1,11 @@
-With PageSpeed Insights you can identify ways to make your site faster and more mobile-friendly.
+This extension analyzes the performance websites and suggests ways of improving it. It:
 
-And this is also key to get a pole position in Google Search. The tool analyzes the delivered content of your website and makes suggestions to improve it.
+ - Analyzes the performance of websites hosted on your server.
+ - Assigns every analyzed website a score corresponding to its performance.
+ - Generates a report based on the results of the analysis.
+ - Displays possible ways to optimize the analyzed websites' performance.
+ - Provides links in the extension UI to the suggested tools aimed at improving websites' performance (for example, the *mod_pagespeed* Apache module).
 
-More information about the extension: https://www.plesk.com/blog/introducing-google-pagespeed-insights-plesk-extension/
+[Learn more](https://www.plesk.com/blog/introducing-google-pagespeed-insights-plesk-extension/) about Google PageSpeed Insights.
 
-Detailed explanation of the PageSpeed Insights performance rules: https://www.plesk.com/blog/google-pagespeed-insights-optimize-your-site/
+[Learn](https://www.plesk.com/product-technology/google-pagespeed-insights-optimize-your-site) how to improve your website performance with Google PageSpeed Insights.
